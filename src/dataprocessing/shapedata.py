@@ -1,70 +1,36 @@
+""" 
+Here we get a dictionary ``countryshapes`` of processed shape files where each key is the name of that country
+as listed in ``countries_background`` and ``countries_highlighted``. The values are instances of ``Countryshp``
+with the attribute ``shp`` a gpd.GeoDataFrame with columns 'country', 'name', 'admin_level' and 'geometry'. 
+When the country is a background country, the only value for 'admin_level' is 'adm0'. When it concerns a 
+'highlighted' country, then values are 'adm0', 'adm1' or 'adm2'.
+"""
+
 import geopandas as gpd 
-import pandas as pd
-from dataclasses import dataclass
+from tqdm import tqdm 
+from pathlib import Path
+from .shapedata_containers import Countryshp, Countryrawshp
+from ..utils.countries import countries_background, countries_highglighted, countrycodes_dict
 
-@dataclass
-class Countryshp:
-    """Simple container for processed shape data."""
-    name: str
-    code: str
-    shp: gpd.GeoDataFrame
+def load_shapedata(raw_path : Path,
+                   capitals_geometry : gpd.GeoDataFrame
+                   ) -> tuple[dict[str, Countryrawshp], dict[str, Countryshp]]:
+    rawcountryshapes: dict[str, Countryrawshp] = {}
+    countryshapes: dict[str, Countryshp]        = {}
 
-    def __repr__(self) -> str:
-        return f"<{self.__class__.__name__}({self.name})>"
+    for countryname, countrycode in tqdm(countrycodes_dict.items()):
+        path        = raw_path / countryname 
+        file_base   = 'geoBoundaries-' + countrycode.upper()
 
-@dataclass
-class Countryrawshp:
-    """
-    Simple container for raw shape data with possible resolutions of admin0-2.
-    To get a container of processed data, use ``process()``.
-    """    
-    name: str
-    code: str
-    admin0: gpd.GeoDataFrame 
-    admin1: gpd.GeoDataFrame | None
-    admin2: gpd.GeoDataFrame | None
+        shp = Countryrawshp(
+            countryname, 
+            countrycode,
+            gpd.read_file(path / (file_base + "-" + "ADM0.shp")),           
+            gpd.read_file(path / (file_base + "-" + "ADM1.shp")) if countryname in countries_highglighted else None,
+            gpd.read_file(path / (file_base + "-" + "ADM2.shp")) if countryname in countries_highglighted else None,                      
+        )
 
-    def process(self) -> Countryshp:
-        """
-        Returns a processed shape data in form of ``Countryshp`` instance.
-        This method orchestrates the following four subprocesses:
-        - renaming of columns
-        - selection of columns
-        - make all string values lowercase
-        - merge the shapes for all geographical resolutions (when available).
-        """
-        if self.admin1 is None or self.admin2 is None:
-            gdf_merged = gpd.GeoDataFrame(
-                self._lowercase(self._select_cols(self._rename_cols(self.admin0)))
-                )
+        countryshapes[countryname] = shp.process(capitals_geometry[capitals_geometry['country'] == countryname])
+        rawcountryshapes[countryname] = shp 
 
-        else:
-            gdf_merged = gpd.GeoDataFrame(
-                pd.concat([
-                    self._lowercase(self._select_cols(self._rename_cols(self.admin0))),
-                    self._lowercase(self._select_cols(self._rename_cols(self.admin1))),
-                    self._lowercase(self._select_cols(self._rename_cols(self.admin2)))
-                ]))
-
-        return Countryshp(self.name, self.code, gdf_merged)
-    
-    def _rename_cols(self, gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
-        columns_mapping = {
-            'shapeName' : 'name',
-            'shapeType' : 'admin_level',
-            'shapeGroup': 'country'
-        }
-        return gdf.rename(columns = columns_mapping)
-
-    def _select_cols(self, gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
-        columns = ['country','name','admin_level','geometry']
-        return gdf[columns]
-
-    def _lowercase(self, gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
-        gdf['country']      = gdf['country'].str.lower()
-        gdf['name']         = gdf['name'].str.lower()
-        gdf['admin_level']  = gdf['admin_level'].str.lower()
-        return gdf
-                
-    def __repr__(self) -> str:
-        return f"<{self.__class__.__name__}({self.name})>"
+    return rawcountryshapes, countryshapes
