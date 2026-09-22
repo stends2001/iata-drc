@@ -50,3 +50,10 @@ countrycodes_dict = {
     'zambia'        : 'zmb',
     'zimbabwe'      : 'zwe'
 }
+
+capital_mappings = {
+    'democratic republic of the congo'    : 'drc',
+    'south sudan'                         : 'south_sudan',
+    'central african republic'            : 'caf',
+    'united republic of tanzania'         : 'tanzania'    
+}
