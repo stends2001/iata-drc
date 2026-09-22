@@ -16,14 +16,18 @@ class Countryshp:
 @dataclass
 class Countryrawshp:
     """
-    Simple container for raw shape data with possible resolutions of admin0-2.
+    Container for raw shape data with possible resolutions of admin0-2.
     To get a container of processed data, use ``process()``.
+
+    More resolution is allowed, deeper than admin2, on the condition that it is fed in as list of gdfs.
+    Further, required columns are ``'shapeName'``, ``'shapeType'`` and ``'shapeGroup'``.
     """    
     name: str
     code: str
     admin0: gpd.GeoDataFrame 
     admin1: gpd.GeoDataFrame | None
     admin2: gpd.GeoDataFrame | None
+    deeper: list[gpd.GeoDataFrame] | None = None
 
     def process(self, capital: gpd.GeoDataFrame) -> Countryshp:
         """
@@ -39,13 +43,21 @@ class Countryrawshp:
                 self._lowercase(self._select_cols(self._rename_cols(self.admin0)))
                 )
 
+        elif self.deeper is None:
+            # gdf_merged = gpd.GeoDataFrame(
+            #     pd.concat([
+            #         self._lowercase(self._select_cols(self._rename_cols(self.admin0))),
+            #         self._lowercase(self._select_cols(self._rename_cols(self.admin1))),
+            #         self._lowercase(self._select_cols(self._rename_cols(self.admin2)))
+            #     ]))
+            gdf_merged = gpd.GeoDataFrame(
+                pd.concat([self._lowercase(self._select_cols(self._rename_cols(gdf))) for gdf in [self.admin0, self.admin1, self.admin2]])
+            )
+
         else:
             gdf_merged = gpd.GeoDataFrame(
-                pd.concat([
-                    self._lowercase(self._select_cols(self._rename_cols(self.admin0))),
-                    self._lowercase(self._select_cols(self._rename_cols(self.admin1))),
-                    self._lowercase(self._select_cols(self._rename_cols(self.admin2)))
-                ]))
+                pd.concat([self._lowercase(self._select_cols(self._rename_cols(gdf))) for gdf in [self.admin0, self.admin1, self.admin2] + self.deeper])
+            )
 
         return Countryshp(
             self.name, 

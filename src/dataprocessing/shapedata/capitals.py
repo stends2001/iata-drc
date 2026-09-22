@@ -5,7 +5,7 @@ Get capitals geometries
 import pandas as pd 
 import geopandas as gpd
 from pathlib import Path
-from ..utils.countries import capital_mappings
+from ...utils.countries import capital_mappings
 
 def load_capitals(path : Path) -> gpd.GeoDataFrame:
     capitals_data_raw  = pd.read_csv(path)
