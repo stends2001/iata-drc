@@ -1,4 +1,4 @@
-from .shapedata import load_shapedata
+from .shapedata import load_shapedata, get_drc_harmfile
 from .capitals import load_capitals, preprocess_capitals
 from ...utils.pathmanager import PathManager
 
