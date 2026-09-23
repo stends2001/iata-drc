@@ -15,12 +15,18 @@ from .shapedata_containers import Countryshp, Countryrawshp
 from ...utils.countries import countries_background, countries_highglighted, countrycodes_dict
 
 def load_shapedata(raw_path : Path,
-                   capitals_geometry : gpd.GeoDataFrame
+                   capitals_geometry : gpd.GeoDataFrame,
+                   verbose : bool
                    ) -> tuple[dict[str, Countryrawshp], dict[str, Countryshp]]:
     rawcountryshapes: dict[str, Countryrawshp] = {}
     countryshapes: dict[str, Countryshp]        = {}
 
-    for countryname, countrycode in tqdm(countrycodes_dict.items()):
+    if verbose:
+        iterator = tqdm(countrycodes_dict.items())
+    else:
+        iterator = countrycodes_dict.items()
+
+    for countryname, countrycode in iterator:
         path        = raw_path / countryname 
         file_base   = 'geoBoundaries-' + countrycode.upper()
 
