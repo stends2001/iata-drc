@@ -47,7 +47,9 @@ def load_drc_health_zones(path : Path) -> gpd.GeoDataFrame:
     return drc_hz
 
 def get_drc_harmfile(raw_data_path : Path) -> pd.DataFrame:
-    population_data         = pd.read_excel(raw_data_path / 'drc-hpc-projection-population-2024.xlsx')
-    population_data['hz']   = population_data['Zone de sante'].replace(mapping_pop)
-    harmfile                = population_data[['Province','Territoire','hz']].rename(columns = {'Province':'province','Territoire':'territoire'})
+    population_data                 = pd.read_excel(raw_data_path / 'drc-hpc-projection-population-2024.xlsx')
+    population_data['healthzone']   = population_data['Zone de sante'].replace(mapping_pop)
+    harmfile                        = population_data[['Province','Territoire','healthzone']].rename(columns = {'Province':'province','Territoire':'territoire'})
+    for col in harmfile.columns.tolist():
+        harmfile[col] = harmfile[col].str.lower()
     return harmfile
