@@ -1,11 +1,14 @@
 import pandas as pd 
 from pathlib import Path 
+from ..utils.countries import countries_highglighted
 
 mappings = {
     'Congo  Democratic Republic of' : 'drc',
     'Congo'                         : 'congo',
     'Uganda'                        : 'uganda',
-    'South Sudan'                   : 'south sudan'
+    'South Sudan'                   : 'south_sudan',
+    'Rwanda'                        : 'rwanda',
+    'Burundi'                       : 'burundi'
     }
 
 def load_raw_iata(rawpath : Path, filename):
@@ -43,4 +46,6 @@ def preprocess_iata_data(df : pd.DataFrame) -> pd.DataFrame:
             df[column]=df[column].replace(mappings)
 
     df = df.drop(columns = ['month_year'])
+
+    df = df[df['trip_origin_co'].isin(countries_highglighted)]
     return  df
