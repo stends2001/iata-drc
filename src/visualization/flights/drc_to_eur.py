@@ -20,3 +20,7 @@ def plot_flights_drc_to_europe(ax : Axes, df : pd.DataFrame):
     sns.lineplot(drc_to_europe[drc_to_europe['highlighted'] == False], 
                  x = 'timestamp', y = 'passengers', c = 'grey')
     ax.set_yscale('log')
+
+    ax.set_title('Outbound flights DRC -> Europe',loc = 'left')
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
