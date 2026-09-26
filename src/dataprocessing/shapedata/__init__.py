@@ -1,5 +1,7 @@
 from .shapedata import load_shapedata, get_drc_harmfile
 from .capitals import load_capitals, preprocess_capitals
+from .iata_airports import load_airports_shapedata
+from .drc_road_network import load_drc_road_network
 from ...utils.pathmanager import PathManager
 
 def process_shapedata(verbose : bool = False):
