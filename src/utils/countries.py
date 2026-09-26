@@ -1,9 +1,9 @@
 countries_highglighted = [
     'burundi',
     'drc',
-    'rwanda',
     'south_sudan',
-    'uganda'
+    'rwanda',
+    'uganda'    
     ]
 
 countries_background = [
@@ -21,17 +21,17 @@ countries_background = [
     'sudan',
     'tanzania',
     'zambia',
-    'zimbabwe'
+    'zimbabwe',
     ]
 
 
 countrycodes_dict = {
     # highlight
-    'burundi'       : 'bdi',    
     'drc'           : 'cod',
-    'rwanda'        : 'rwa',
     'south_sudan'   : 'ssd',
     'uganda'        : 'uga',
+    'burundi'       : 'bdi',        
+    'rwanda'        : 'rwa',  
 
     # background
     'angola'        : 'ago',
@@ -57,3 +57,44 @@ capital_mappings = {
     'central african republic'            : 'caf',
     'united republic of tanzania'         : 'tanzania'    
 }
+
+european_countries_hl = [
+    'Belgium',
+    'France',
+    'Germany',
+    'Italy',
+    'Spain',
+]
+
+european_countries = [
+    'Austria',
+    'Belgium',
+    'Bulgaria',
+    'Croatia',
+    'Cyprus',
+    'Czechia',
+    'Denmark',
+    'Estonia',
+    'Finland',
+    'France',
+    'Germany',
+    'Greece',
+    'Hungary',
+    'Iceland',
+    'Ireland',
+    'Italy',
+    'Latvia',
+    'Lithuania',
+    'Luxembourg',
+    'Malta',
+    'Netherlands',
+    'Norway',
+    'Poland',
+    'Portugal',
+    'Romania',
+    'Slovakia',
+    'Slovenia',
+    'Spain',
+    'Sweden',
+    'Switzerland',
+]
