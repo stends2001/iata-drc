@@ -10,6 +10,9 @@ import geopandas as gpd
 import pandas as pd
 from tqdm import tqdm 
 from pathlib import Path
+
+from ..adjust_double_healthzones import adjust_doubles_population_size, adjust_double_shapedata
+
 from ...utils.drc_mappings import mapping_pop
 from .shapedata_containers import Countryshp, Countryrawshp
 from ...utils.countries import countries_background, countries_highglighted, countrycodes_dict
@@ -46,6 +49,9 @@ def load_shapedata(raw_path : Path,
 
 def load_drc_health_zones(path : Path) -> gpd.GeoDataFrame:
     drc_hz = gpd.read_file(path / 'osm_rdc_sante_zones_211212.gpkg')
+
+    drc_hz = adjust_double_shapedata(drc_hz)
+
     drc_hz = drc_hz[['name','geometry']]
     drc_hz['shapeGroup'] = 'cod'
     drc_hz['shapeType'] = 'healthzone'
@@ -56,6 +62,14 @@ def get_drc_harmfile(raw_data_path : Path) -> pd.DataFrame:
     population_data                 = pd.read_excel(raw_data_path / 'drc-hpc-projection-population-2024.xlsx')
     population_data['healthzone']   = population_data['Zone de sante'].replace(mapping_pop)
     harmfile                        = population_data[['Province','Territoire','healthzone']].rename(columns = {'Province':'province','Territoire':'territoire'})
+    # double values for 'bili', 'lubunga'
+    # when column 'province' == 'Nord-Ubangi' and 'healthzone' == 'bili' ==> make 'healthzone' 'bili (nord-ubangi)'
+    # when column 'province' == 'Bas-Uele' and 'healthzone' == 'bili' ==> make 'healthzone' 'bili (bas-uele)'
+    # when column 'province' == 'Tshopo' and 'healthzone' == 'lubunga' ==> make 'healthzone' 'lubunga (tshopo)'
+    # when column 'province' == 'Kasaï-Central' and 'healthzone' == 'lubunga' ==> make 'healthzone' 'lubunga (kasaï-central)'    
+
+    harmfile  = adjust_doubles_population_size(harmfile)
+
     for col in harmfile.columns.tolist():
         harmfile[col] = harmfile[col].str.lower()
     return harmfile

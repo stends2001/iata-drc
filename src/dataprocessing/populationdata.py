@@ -2,7 +2,7 @@ from pathlib import Path
 import pandas as pd
 
 from ..utils.drc_mappings import mapping_pop
-
+from .adjust_double_healthzones import adjust_doubles_population_size
 def load_population_data(rawpath : Path) -> pd.DataFrame:
     """load raw population data"""
     return pd.read_excel(rawpath / 'drc-hpc-projection-population-2024.xlsx')
@@ -10,6 +10,7 @@ def load_population_data(rawpath : Path) -> pd.DataFrame:
 def process_population_data(df : pd.DataFrame) -> pd.DataFrame:
     """process population data"""
     df['healthzone']= df['Zone de sante'].replace(mapping_pop)
+    df = adjust_doubles_population_size(df.rename(columns = {'Province':'province','Territoire':'territoire'}))    
     df              = df.copy().rename(columns = {'Population 2024 ' : 'population'})
     df              = df[['population','healthzone']]
     df['healthzone']= df['healthzone'].str.lower()
