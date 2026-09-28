@@ -23,9 +23,9 @@ mapping_pop = {
 mapping_cases = {
     'Boma Mangbetu'     : 'Boma-Mangbetu',
     'Gethy'             : 'Gety',
-    'Lubunga (Tshopo)'  : 'Lubunga',
     'Makiso Kisangani'  : 'Makiso-Kisangani' ,
     'Miti Murhesa'      :  'Miti-Murhesa',
     'Nia-Nia'           : 'Nia Nia',
     'Rumba'             : 'Rimba',
+    'Lubunga'           : 'Lubunga (Tshopo)'
  }
