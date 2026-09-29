@@ -13,7 +13,7 @@ from pathlib import Path
 
 from ..adjust_double_healthzones import adjust_doubles_population_size, adjust_double_shapedata
 
-from ...utils.drc_mappings import mapping_pop
+from ...utils.drc_mappings import mapping_pop, province_mapping_shapefile
 from .shapedata_containers import Countryshp, Countryrawshp
 from ...utils.countries import countries_background, countries_highglighted, countrycodes_dict
 
@@ -42,6 +42,9 @@ def load_shapedata(raw_path : Path,
             deeper = [load_drc_health_zones(path)] if countryname == 'drc' else None
         )
 
+        if countryname == 'drc':
+            shp.admin1['shapeName'] = shp.admin1['shapeName'].replace(province_mapping_shapefile)
+
         countryshapes[countryname] = shp.process(capitals_geometry[capitals_geometry['country'] == countryname])
         rawcountryshapes[countryname] = shp 
 
@@ -49,6 +52,7 @@ def load_shapedata(raw_path : Path,
 
 def load_drc_health_zones(path : Path) -> gpd.GeoDataFrame:
     drc_hz = gpd.read_file(path / 'osm_rdc_sante_zones_211212.gpkg')
+    drc_hz = drc_hz[drc_hz['name'] != 'Mai Ndombe I'].reset_index(drop = True)
 
     drc_hz = adjust_double_shapedata(drc_hz)
 
