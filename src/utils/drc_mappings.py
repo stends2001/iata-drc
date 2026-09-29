@@ -29,3 +29,32 @@ mapping_cases = {
     'Rumba'             : 'Rimba',
     'Lubunga'           : 'Lubunga (Tshopo)'
  }
+
+province_mapping_shapefile = {
+    'Central Kasai'     : 'kasaï-central',
+    'Haut-Katanga'      : 'haut-katanga',
+    'Haut-Lomami'       : 'haut-lomami',
+    'Ituri'             : 'ituri',
+    'Kasai'             : 'kasaï',
+    'Kasai-Oriental'    : 'kasaï-oriental',
+    'Kinshasa'          : 'kinshasa',
+    'Kongo-Central'     : 'kongo-central',
+    'Kwango'            : 'kwango',
+    'Kwilu'             : 'kwilu',
+    'Lomami'            : 'lomami',
+    'Lower Uele'        : 'bas-uele',
+    'Lualaba'           : 'lualaba',
+    'Mai-Ndombe'        : 'maï-ndombe',
+    'Maniema'           : 'maniema',
+    'Mongala'           : 'mongala',
+    'Nord-Ubangi'       : 'nord-kivu',
+    'North Kivu'        : 'nord-ubangi',
+    'Sankuru'           : 'sankuru',
+    'South Kivu'        : 'sud-kivu',
+    'Sud-Ubangi'        : 'sud-ubangi',
+    'Tanganyika'        : 'tanganyika',
+    'Tshopo'            : 'tshopo',
+    'Tshuapa'           : 'tshuapa',
+    'Upper Uele'        : 'haut-uele',
+    'Ã\x89quateur'      : 'equateur'
+    }
