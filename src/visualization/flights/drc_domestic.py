@@ -3,7 +3,7 @@ import pandas as pd
 
 def plot_domestic_international_flights_drc(ax : Axes, df : pd.DataFrame):
 
-    drc_intl            = df[df['trip_origin_co'] == 'drc']
+    drc_intl            = df.loc[df['trip_origin_co'] == 'drc'].copy()
     drc_intl.loc[drc_intl['trip_destination_co'] == 'drc', 'domestic'] = 'domestic'
     drc_intl.loc[drc_intl['trip_destination_co'] != 'drc', 'domestic'] = 'international'
 
