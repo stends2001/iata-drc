@@ -2,6 +2,7 @@ from matplotlib.axes import Axes
 import geopandas as gpd
 
 from ..utils import airport_colors
+from ...utils.constants import crs_metres
 
 def add_catchment_areas(ax : Axes,
                         catchment_areas : gpd.GeoDataFrame,
@@ -53,9 +54,10 @@ def add_catchment_areas(ax : Axes,
         )    
 
 
-def plot_highlighted_airports(ax: Axes, airports_shp : gpd.GeoDataFrame):
+def plot_highlighted_airports(ax: Axes, airports_shp : gpd.GeoDataFrame, airports : list[str]):
 
-    
+    airports_shp = airports_shp[airports_shp['code'].isin(airports)]
+    airports_shp = airports_shp.to_crs(crs_metres)
     colors = airports_shp["code"].map(airport_colors).fillna("lightgray")
 
     airports_shp.plot(

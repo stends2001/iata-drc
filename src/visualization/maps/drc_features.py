@@ -160,24 +160,27 @@ def add_aiports_on_map(ax : Axes,
     domestic_pct['domestic_share'] = 100 * domestic_pct['domestic_passengers'] / domestic_pct['total_passengers']
     domestic_pct['international_share'] = 100 - domestic_pct['domestic_share']
 
-    p = np.log1p(domestic_pct['total_passengers'])
-    domestic_pct['marker_size'] = 6 + (p - p.min()) / (p.max() - p.min()) * (180 - 6)
+    p = np.log10(domestic_pct['total_passengers'].clip(lower=1))
+
+    domestic_pct['marker_size'] = 5 + p**2 * 7
 
     drc_airports_shp = airports_shapefile[airports_shapefile['code'].isin(airports_drc)]
     gdf = gpd.GeoDataFrame(domestic_pct.merge(drc_airports_shp, left_on='trip_origin_ap', right_on='code'),
                         geometry='geometry', crs=drc_airports_shp.crs)
 
-    gdf.plot(column='international_share', markersize=gdf['marker_size'].to_numpy(),
-            cmap='BrBG', vmin=0, vmax=100, edgecolor='black', ax=ax)
-    gdf.plot(markersize = gdf['marker_size'], column=gdf['international_share'], cmap = 'BrBG', edgecolor = 'black', ax = ax)
 
     norm1 = plt.Normalize(
         vmin=0,
         vmax=100
     )
 
+    cmap = 'PuOr'
+
+    gdf.plot(column='international_share', markersize=gdf['marker_size'].to_numpy(),
+            cmap=cmap, vmin=0, vmax=100, edgecolor='black', ax=ax, norm = norm1)    
+
     sm = plt.cm.ScalarMappable(
-        cmap="BrBG",
+        cmap=cmap,
         norm=norm1
     )
 
@@ -271,8 +274,12 @@ def add_cases_and_airports_on_map(ax : Axes, fig : Figure, gdf: gpd.GeoDataFrame
 
     # Labels
     for idx, row in aps.iterrows():
+        apscode = row['code']
+
+        label =apscode+" *" if apscode in ['GOM', 'BUX'] else apscode
+
         ax.annotate(
-            row["code"],
+            text = label,
             xy=(row.geometry.x, row.geometry.y),       # marker position
             xytext=(8, 8),                              # text offset in points
             textcoords="offset points",

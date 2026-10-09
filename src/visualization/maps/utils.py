@@ -48,9 +48,14 @@ geomap_args = {
     }
 }
 
+
 box_coordinates = {
     'background' : {
         'x' : (11.8, 37),
         'y' : (-15, 13),
+    },
+    'drc' : {
+        'x' : (11.8, 32),
+        'y' : (-14, 6),
     }
 }
