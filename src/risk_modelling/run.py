@@ -8,6 +8,7 @@ from .distance import get_distance_matrix
 from .huff import get_huff
 from .propagate import propagate
 
+from ..dataprocessing.airport_closures import apply_airport_closures, airports_closed_since
 from ..utils.constants import crs_metres
 # mode : air[ports, months]
 
@@ -26,9 +27,14 @@ class HuffOutput:
     risk_intl : pd.DataFrame
     intl_pax :  pd.DataFrame
 
+    # context
+    airports : list[str]
+    closures : bool
+
 
 def run_analysis(df_out : pd.DataFrame,
                  df_in : pd.DataFrame,
+                 closures : bool,
                  mode : Mode,
                  airports : list[str],
                  drc_shape : gpd.GeoDataFrame,
@@ -41,6 +47,9 @@ def run_analysis(df_out : pd.DataFrame,
     population_df = pcd_population
     
     """
+    if closures:
+        df_in = apply_airport_closures(df_in)
+        df_out = apply_airport_closures(df_out)
 
     population = population_df.set_index('healthzone')['population'].astype(float)
 
@@ -74,5 +83,7 @@ def run_analysis(df_out : pd.DataFrame,
                 I,
                 risk_dom,
                 risk_intl,
-                intl_pax
+                intl_pax,
+                airports,
+                closures
                 )
