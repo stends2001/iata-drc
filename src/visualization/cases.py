@@ -3,8 +3,11 @@ from matplotlib.axes import Axes
 import pandas as pd
 import seaborn as sns
 import matplotlib.dates as mdates
+from datetime import datetime
 
-def plot_national_cases(axes : list[Axes], casedata : pd.DataFrame):
+def plot_national_cases(axes : list[Axes], 
+                        casedata : pd.DataFrame,
+                        dates : str | list[str] | None = None):
 
     cases_national = casedata.groupby(['date']).agg({'cases_new' : 'sum', 
                                                         'cases_cumulative_corrected' : 'sum'}).reset_index(drop = False)
@@ -22,3 +25,26 @@ def plot_national_cases(axes : list[Axes], casedata : pd.DataFrame):
 
         ax.spines['top'].set_visible(False)
         ax.spines['right'].set_visible(False)
+
+    if dates:
+
+        if isinstance(dates, str):
+            dates = [dates]
+
+        for date in dates:
+            # date = 'YYYY-MM-DD'
+            axes[0].vlines(
+                x=pd.to_datetime(date),
+                ymin=0,
+                ymax=cases_national['cases_cumulative_corrected'].max(),
+                colors='black',
+                linestyles='dashed'
+            )    
+
+            axes[1].vlines(
+                x=pd.to_datetime(date),
+                ymin=0,
+                ymax=cases_national['cases_new'].max(),
+                colors='black',
+                linestyles='dashed'
+            )                
