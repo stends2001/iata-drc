@@ -1,6 +1,8 @@
 from pathlib import Path 
 import pandas as pd
 
+from .shapedata.uganda import get_adm2_uganda_shp
+from ..utils import PathManager
 from ..utils.drc_mappings import mapping_pop
 from .adjust_double_healthzones import adjust_doubles_population_size
 def load_population_data(rawpath : Path) -> pd.DataFrame:
@@ -15,3 +17,13 @@ def process_population_data(df : pd.DataFrame) -> pd.DataFrame:
     df              = df[['population','healthzone']]
     df['healthzone']= df['healthzone'].str.lower()
     return df
+
+def get_population_data_uganda() -> pd.DataFrame:
+    adm2codes = get_adm2_uganda_shp(True)
+    uganda_pop_raw = pd.read_excel(PathManager().data/'raw'/ 'shapedata'/'uganda'/'uga_admpop_2023.xlsx', sheet_name = None) 
+    popsize = pd.merge(adm2codes[['shapeName','adm2_pcode']],
+        uganda_pop_raw['uga_admpop_adm2_2023'],
+        left_on= 'adm2_pcode', right_on = 'ADM2_PCODE')
+    popsize = popsize[['T_TL','shapeName']].rename(columns = {'T_TL' : 'population', 'shapeName' : 'adm2'})
+    popsize['adm2'] = popsize['adm2'].str.lower()
+    return popsize
