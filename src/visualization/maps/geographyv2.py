@@ -13,7 +13,7 @@ from ...utils.constants import crs_degrees, crs_metres
 CAPITAL_COLOR = '#8c510a'                                               # brown
 CASE_STYLE    = dict(color='red', edgecolor='black', linewidth=0.5)     # case dots
 HZ_STYLE      = dict(facecolor='none', edgecolor='#52514e', linewidth=0.4)
-PROVINCES_LABELLED = ['bas-uele', 'haut-uele', 'ituri', 'nord-kivu', 'tshopo', 'sud-kivu']
+PROVINCES_LABELLED = ['bas-uele', 'haut-uele', 'ituri', 'nord-kivu', 'tshopo', 'sud-kivu', 'sud-ubangi']
 
 
 # ------------------------------------------------------------------------------------------------
