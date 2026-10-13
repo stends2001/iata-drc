@@ -8,7 +8,7 @@ from .distance import get_distance_matrix
 from .huff import get_huff
 from .propagate import propagate
 
-from ..dataprocessing.airport_closures import apply_airport_closures, airports_closed_since
+from ..dataprocessing.airport_closures import apply_airport_closures
 from ..utils.constants import crs_metres
 # mode : air[ports, months]
 
