@@ -16,7 +16,7 @@ def plot_drc_skeleton(ax : Axes,
     for admin_lvl in adms:
 
         sub_section = shp[shp['admin_level'] == admin_lvl]
-        map_args    = geomap_args[admin_lvl]
+        map_args = dict(geomap_args[admin_lvl])
 
         if background_empty:
             map_args['facecolor'] = 'none'
@@ -41,7 +41,7 @@ def plot_admin_units(ax : Axes,
     for admin_lvl in adms:
 
         sub_section = shp[shp['admin_level'] == admin_lvl]
-        map_args    = geomap_args[admin_lvl]
+        map_args = dict(geomap_args[admin_lvl])
 
         if background_empty:
             map_args['facecolor'] = 'none'
