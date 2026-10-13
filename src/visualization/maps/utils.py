@@ -20,13 +20,13 @@ geomap_args = {
     'adm1' : {
         'facecolor'     : 'none',
         'edgecolor'     : 'black',
-        'linewidth'     : 0.1
+        'linewidth'     : 0.2
         },
 
     'adm2' : {
         'facecolor'     : 'none',
-        'edgecolor'     : 'none',
-        'linewidth'     : 0.25
+        'edgecolor'     : 'grey',
+        'linewidth'     : 0.05
         }, 
 
     'healthzone' : {
