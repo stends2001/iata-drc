@@ -1,5 +1,11 @@
 import pandas as pd 
 
+airports_closed_since = {
+    'BUX': '2026-06-01',
+    'GOM': '2025-04-01'
+    }      
+
+
 def load_airport_closures() -> pd.DataFrame:
 
     events = {
@@ -17,10 +23,10 @@ def load_airport_closures() -> pd.DataFrame:
     airport_closures['Date'] = pd.to_datetime(airport_closures['Date'])
     return airport_closures
 
-def apply_airport_closures(df: pd.DataFrame, closure_dict : dict[str, str]) -> pd.DataFrame:
+def apply_airport_closures(df: pd.DataFrame) -> pd.DataFrame:
     """Remove trips from (and, where known, to) airports in the months they were closed."""
     df = df.copy()
-    for airport, since in closure_dict.items():
+    for airport, since in airports_closed_since.items():
         touches = df['trip_origin_ap'] == airport
 
         if 'trip_destination_ap' in df.columns:
