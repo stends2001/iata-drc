@@ -12,7 +12,7 @@ from tqdm import tqdm
 from pathlib import Path
 
 from ..adjust_double_healthzones import adjust_doubles_population_size, adjust_double_shapedata
-
+from .uganda import get_adm2_uganda_shp
 from ...utils.drc_mappings import mapping_pop, province_mapping_shapefile
 from .shapedata_containers import Countryshp, Countryrawshp
 from ...utils.countries import countries_background, countries_highglighted, countrycodes_dict
@@ -33,12 +33,20 @@ def load_shapedata(raw_path : Path,
         path        = raw_path / countryname 
         file_base   = 'geoBoundaries-' + countrycode.upper()
 
+        adm2 = None 
+
+        if countryname == 'uganda':
+            adm2 = get_adm2_uganda_shp(False)
+
+        elif countryname in countries_highglighted:
+            adm2 = gpd.read_file(path / (file_base + "-" + "ADM2.shp"))
+
         shp = Countryrawshp(
             countryname, 
             countrycode,
             gpd.read_file(path / (file_base + "-" + "ADM0.shp")),           
             gpd.read_file(path / (file_base + "-" + "ADM1.shp")) if countryname in countries_highglighted else None,
-            gpd.read_file(path / (file_base + "-" + "ADM2.shp")) if countryname in countries_highglighted else None,       
+            adm2,
             deeper = [load_drc_health_zones(path)] if countryname == 'drc' else None
         )
 
