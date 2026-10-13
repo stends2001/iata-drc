@@ -83,6 +83,6 @@ class Countryrawshp:
         gdf['name']         = gdf['name'].str.lower()
         gdf['admin_level']  = gdf['admin_level'].str.lower()
         return gdf
-                
+                 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__}({self.name})>"
