@@ -13,3 +13,5 @@ airports_drc = [
        'KWZ', 'MDK', 'MJM', 'BNC', 
        'BUX', 'IRP', 'BDT', 'MNB', 'RUE',
        ]
+
+airports_uga = ['EBB', 'KHX', 'KXO', 'RUA', 'KSE', 'PAF']
