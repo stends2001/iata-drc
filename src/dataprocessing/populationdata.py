@@ -5,6 +5,9 @@ from .shapedata.uganda import get_adm2_uganda_shp
 from ..utils import PathManager
 from ..utils.drc_mappings import mapping_pop
 from .adjust_double_healthzones import adjust_doubles_population_size
+
+from ..utils.drc_mappings import uganda_namesakes_drc
+
 def load_population_data(rawpath : Path) -> pd.DataFrame:
     """load raw population data"""
     return pd.read_excel(rawpath / 'drc-hpc-projection-population-2024.xlsx')
@@ -26,4 +29,6 @@ def get_population_data_uganda() -> pd.DataFrame:
         left_on= 'adm2_pcode', right_on = 'ADM2_PCODE')
     popsize = popsize[['T_TL','shapeName']].rename(columns = {'T_TL' : 'population', 'shapeName' : 'adm2'})
     popsize['adm2'] = popsize['adm2'].str.lower()
+    popsize['adm2'] = popsize['adm2'].replace(uganda_namesakes_drc)
+    
     return popsize
