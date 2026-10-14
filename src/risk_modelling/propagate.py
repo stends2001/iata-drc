@@ -71,7 +71,8 @@ def propagate(df1 : pd.DataFrame,
 
     outgoing_flights    = get_outgoing_flights(df1, airports)
     passengers_per_airp = by_airport(outgoing_flights, airports, months)
-    international_passengers_per_airp = by_airport(outgoing_flights[outgoing_flights['trip_destination_co'] != 'drc'], airports, months)
+    is_intl = outgoing_flights['trip_origin_co'] != outgoing_flights['trip_destination_co']
+    international_passengers_per_airp = by_airport(outgoing_flights[is_intl], airports, months)    
     international_share  = (international_passengers_per_airp.sum(axis=1) / passengers_per_airp.sum(axis=1).replace(0, np.nan)).fillna(0)   # from the data
 
     # 3. domestic flows between DRC airports (dataset 1 has trip_destination_ap)
