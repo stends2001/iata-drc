@@ -58,3 +58,7 @@ province_mapping_shapefile = {
     'Upper Uele'        : 'haut-uele',
     'Ã\x89quateur'      : 'equateur'
     }
+
+uganda_namesakes_drc = {'rwampara' : 'rwampara (uganda)', 
+                        'ibanda' : 'ibanda  (uganda)', 
+                        'kole' : 'kole  (uganda)'}
