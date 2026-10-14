@@ -137,6 +137,7 @@ def add_cases_to_map(ax : Axes,
 def add_aiports_on_map(ax : Axes, 
                         fig : Figure,
                         travel_data : pd.DataFrame,
+                        airports : list[str],
                         airports_shapefile : gpd.GeoDataFrame,
                         scalebar : bool = True
                         ):
@@ -146,7 +147,7 @@ def add_aiports_on_map(ax : Axes,
     """  
     airports_shapefile = airports_shapefile.to_crs(crs_metres)
     zone_out_drc_airports = (
-        travel_data[travel_data['trip_origin_ap'].isin(airports_drc)]
+        travel_data[travel_data['trip_origin_ap'].isin(airports)]
         .assign(domestic=lambda d: d['trip_origin_co'] == d['trip_destination_co'])
         )
 
@@ -164,7 +165,7 @@ def add_aiports_on_map(ax : Axes,
 
     domestic_pct['marker_size'] = 5 + p**2 * 7
 
-    drc_airports_shp = airports_shapefile[airports_shapefile['code'].isin(airports_drc)]
+    drc_airports_shp = airports_shapefile[airports_shapefile['code'].isin(airports)]
     gdf = gpd.GeoDataFrame(domestic_pct.merge(drc_airports_shp, left_on='trip_origin_ap', right_on='code'),
                         geometry='geometry', crs=drc_airports_shp.crs)
 

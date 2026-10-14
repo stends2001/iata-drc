@@ -5,7 +5,8 @@ import pandas as pd
 
 from ....utils.countries import countries_by_continent, continent_colors
 
-def plot_sankey_drc_airport_to_countries(df : pd.DataFrame,
+def plot_sankey_airport_to_countries(df : pd.DataFrame,
+                                     airports : list[str],
                                          start_date: str = '2026-04-01',
                                          end_date: str = '2026-08-01',
                                          top_k_airports : int = 4,
@@ -24,8 +25,9 @@ def plot_sankey_drc_airport_to_countries(df : pd.DataFrame,
             h = avail * s / tot; out.append(min(max(y + h / 2, 0.001), 0.999)); y += h + pad
         return out
 
-    # filter on origin / destination
-    df = df[(df['trip_origin_co'] == 'drc') & (df['trip_destination_co'] != 'drc')]
+    # filter on international travel
+    df = df[(df['trip_origin_co'] != df['trip_destination_co'])]
+    df = df[df['trip_origin_ap'].isin(airports)]
     
     # filter on time
     flights = df[(df['timestamp'] >= start_date) & (df['timestamp'] <= end_date)].copy()
@@ -34,7 +36,7 @@ def plot_sankey_drc_airport_to_countries(df : pd.DataFrame,
     top_airports = flights.groupby('trip_origin_ap')['passengers'].sum().nlargest(top_k_airports).index
 
     # define origin column: if top k airport, then specifiy the airport, else 'other'
-    flights['origin']  = flights['trip_origin_ap'].where(flights['trip_origin_ap'].isin(top_airports), 'other DRC airports')
+    flights['origin']  = flights['trip_origin_ap'].where(flights['trip_origin_ap'].isin(top_airports), 'other airports')
 
     # define region column: if top k country in the region, then specifiy the country, else 'other'    
     flights['region']  = flights['trip_destination_co'].map(countries_by_continent).fillna('other')
@@ -55,7 +57,7 @@ def plot_sankey_drc_airport_to_countries(df : pd.DataFrame,
 
     # get lists of countries, airports and regions
     origins = list(flights.groupby('origin')['passengers'].sum().sort_values(ascending=False).index)
-    origins = [o for o in origins if o != 'other DRC airports'] + (['other DRC airports'] if 'other DRC airports' in origins else [])
+    origins = [o for o in origins if o != 'other airports'] + (['other airports'] if 'other airports' in origins else [])
     regs    = [r for r in continent_colors if r in l1.index.get_level_values(0)]
     ctrs    = [(r, c) for r in regs for c in l1[r].sort_values(ascending=False).index]
 
