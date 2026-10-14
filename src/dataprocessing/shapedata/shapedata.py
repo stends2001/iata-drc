@@ -74,11 +74,6 @@ def get_drc_harmfile(raw_data_path : Path) -> pd.DataFrame:
     population_data                 = pd.read_excel(raw_data_path / 'drc-hpc-projection-population-2024.xlsx')
     population_data['healthzone']   = population_data['Zone de sante'].replace(mapping_pop)
     harmfile                        = population_data[['Province','Territoire','healthzone']].rename(columns = {'Province':'province','Territoire':'territoire'})
-    # double values for 'bili', 'lubunga'
-    # when column 'province' == 'Nord-Ubangi' and 'healthzone' == 'bili' ==> make 'healthzone' 'bili (nord-ubangi)'
-    # when column 'province' == 'Bas-Uele' and 'healthzone' == 'bili' ==> make 'healthzone' 'bili (bas-uele)'
-    # when column 'province' == 'Tshopo' and 'healthzone' == 'lubunga' ==> make 'healthzone' 'lubunga (tshopo)'
-    # when column 'province' == 'Kasaï-Central' and 'healthzone' == 'lubunga' ==> make 'healthzone' 'lubunga (kasaï-central)'    
 
     harmfile  = adjust_doubles_population_size(harmfile)
 
