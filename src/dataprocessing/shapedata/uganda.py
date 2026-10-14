@@ -1,5 +1,5 @@
 import geopandas as gpd
-
+from ...utils.drc_mappings import uganda_namesakes_drc
 from ...utils import PathManager
 
 def get_adm2_uganda_shp(pcode : bool) -> gpd.GeoDataFrame:
@@ -15,5 +15,7 @@ def get_adm2_uganda_shp(pcode : bool) -> gpd.GeoDataFrame:
     cols = ['shapeName', 'shapeType',  'shapeGroup', 'geometry'] 
     if pcode: 
         cols = cols + ['adm2_pcode']
+
+    admin2['shapeName'] = admin2['shapeName'].str.lower().replace(uganda_namesakes_drc)
     
     return admin2[cols]
