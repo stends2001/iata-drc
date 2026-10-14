@@ -101,7 +101,7 @@ european_countries = [
 
 countries_by_continent = {}
 for cont, names in {
-    'Neighboring countries': ['uganda', 'rwanda', 'burundi', 'south_sudan', 'Central African Republic', 'congo', 'Angola','Zambia','Tanzania United Republic of'],
+    'Neighboring countries': ['uganda', 'rwanda', 'burundi', 'south_sudan', 'Central African Republic', 'congo', 'Angola','Zambia','Tanzania United Republic of','drc'],
     'Africa (other)': ['Algeria', 'Cameroon', 'Comoros', "Cote d'Ivoire", 'Egypt', 'Ethiopia', 'Ghana', 'Kenya',
         'Madagascar', 'Malawi', 'Mauritius', 'Morocco', 'Nigeria', 'Senegal', 'South Africa',
         'Togo', 'Tunisia', 'Zimbabwe',  'Benin', 'Botswana',
@@ -141,4 +141,4 @@ continent_colors = {'Neighboring countries' : '#e87ba4',
                   'Asia'                    : '#1baf7a', 
                   'Americas'                : '#4a3aa7',
                   'Oceania'                 : '#008300', 
-                  'other/unknown'           : '#c3c2b7'}
+                  'other'           : '#c3c2b7'}
