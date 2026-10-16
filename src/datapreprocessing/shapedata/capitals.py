@@ -14,7 +14,9 @@ capital_mappings = {
 }
 
 def raw_capitals(path : Path) -> gpd.GeoDataFrame:
-    
+    """
+    Load raw data on capitals: interested in longitude, latitutde and names.
+    """
     capitals_data_raw  = pd.read_csv(path)
 
     capitals_data_raw["geometry"] = gpd.points_from_xy(
@@ -32,17 +34,11 @@ def raw_capitals(path : Path) -> gpd.GeoDataFrame:
     return capitals_data 
 
 def preprocess_capitals(gdf : gpd.GeoDataFrame) -> gpd.GeoDataFrame:
+    """
+    Preprocess capital data
+    """
     gdf['country'] = gdf['country'].str.lower()
     gdf['country'] = gdf['country'].replace(capital_mappings)
     gdf['city'] = gdf['city'].str.lower()
     gdf.crs = crs_degrees
     return gdf
-
-if __name__ == '__main__':
-    pm = PathManager()
-    
-    raw_data = raw_capitals(pm.data / 'raw' / 'shapedata' / 'country-capital-lat-long-population.csv')
-    pcd_data = preprocess_capitals(raw_data)
-    save_gdf(pcd_data,
-             pm.data / 'processed' / 'shapedata' / "shared" / "capitals.shp",
-             )
