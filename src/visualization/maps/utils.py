@@ -7,7 +7,7 @@ geomap_args = {
 
     'background_countries' : {
         'edgecolor'     : '#2F2F2F',
-        'facecolor'     : "#AAA7A7",
+        'facecolor'     : "#d9d9d9",
         'linewidth'     : 0.5
     },
 
@@ -31,8 +31,8 @@ geomap_args = {
 
     'healthzone' : {
         'facecolor'     : 'none',
-        'edgecolor'     : 'lightgrey',
-        'linewidth'     : '0.075'
+        'edgecolor'     : 'grey',
+        'linewidth'     : 0.08
         }     ,
 
     'capital': {
