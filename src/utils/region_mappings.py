@@ -1,0 +1,32 @@
+drc_provinces = {
+                'Central Kasai'     : 'kasaï-central',
+                'Haut-Katanga'      : 'haut-katanga',
+                'Haut-Lomami'       : 'haut-lomami',
+                'Ituri'             : 'ituri',
+                'Kasai'             : 'kasaï',
+                'Kasai-Oriental'    : 'kasaï-oriental',
+                'Kinshasa'          : 'kinshasa',
+                'Kongo-Central'     : 'kongo-central',
+                'Kwango'            : 'kwango',
+                'Kwilu'             : 'kwilu',
+                'Lomami'            : 'lomami',
+                'Lower Uele'        : 'bas-uele',
+                'Lualaba'           : 'lualaba',
+                'Mai-Ndombe'        : 'maï-ndombe',
+                'Maniema'           : 'maniema',
+                'Mongala'           : 'mongala',
+                'Nord-Ubangi'       : 'nord-ubangi',
+                'North Kivu'        : 'nord-kivu',
+                'Sankuru'           : 'sankuru',
+                'South Kivu'        : 'sud-kivu',
+                'Sud-Ubangi'        : 'sud-ubangi',
+                'Tanganyika'        : 'tanganyika',
+                'Tshopo'            : 'tshopo',
+                'Tshuapa'           : 'tshuapa',
+                'Upper Uele'        : 'haut-uele',
+                'Ã\x89quateur'      : 'equateur'
+                }
+
+uga_adm2_drc_namesakes = {'rwampara' : 'rwampara (uganda)', 
+                                'ibanda'   : 'ibanda  (uganda)', 
+                                'kole'     : 'kole  (uganda)'}

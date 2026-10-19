@@ -1,29 +1,45 @@
-countries_highglighted = [
-    'burundi',
-    'drc',
-    'south_sudan',
-    'rwanda',
-    'uganda'    
-    ]
+countries_zone1 = ['burundi',
+                   'drc',
+                   'south_sudan',
+                   'rwanda',
+                   'uganda'    
+                   ]
 
-countries_background = [
-    'angola',
-    'cameroon',
-    'caf',
-    'chad',
-    'congo',
-    'ethiopia',
-    'gabon',
-    'kenya',
-    'malawi',
-    'mozambique',
-    'nigeria',
-    'sudan',
-    'tanzania',
-    'zambia',
-    'zimbabwe',
-    ]
+countrycodes_dict = {
+    # highlight
+    'drc'           : 'cod',
+    'south_sudan'   : 'ssd',
+    'uganda'        : 'uga',
+    'burundi'       : 'bdi',        
+    'rwanda'        : 'rwa',  
 
+    # background
+    'angola'        : 'ago',
+    'cameroon'      : 'cmr',
+    'chad'          : 'tcd',
+    'caf'           : 'caf',
+    'congo'         : 'cog',
+    'ethiopia'      : 'eth',
+    'gabon'         : 'gab',
+    'kenya'         : 'ken',
+    'malawi'        : 'mwi',
+    'mozambique'    : 'moz',
+    'nigeria'       : 'nga',
+    'sudan'         : 'sdn',
+    'tanzania'      : 'tza',
+    'zambia'        : 'zmb',
+    # 'zimbabwe'      : 'zwe'
+}
+
+
+iata_countryname_mappings = {
+    'Congo  Democratic Republic of' : 'drc',
+    'Congo'                         : 'congo',
+    'Uganda'                        : 'uganda',
+    'South Sudan'                   : 'south_sudan',
+    'Rwanda'                        : 'rwanda',
+    'Burundi'                       : 'burundi'
+    }
 
 countrycodes_dict = {
     # highlight

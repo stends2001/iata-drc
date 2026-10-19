@@ -1,4 +1,4 @@
-mapping_pop = {
+healthzones_populationdata = {
     'Banjow Moke'       : 'Banzow Moke',
     'Bogosenubia'       : 'Bogosenubea',
     'Bosanga'           : 'Busanga',
@@ -20,7 +20,7 @@ mapping_pop = {
     }
 
 
-mapping_cases = {
+healthzones_casedata = {
     'Boma Mangbetu'     : 'Boma-Mangbetu',
     'Gethy'             : 'Gety',
     'Makiso Kisangani'  : 'Makiso-Kisangani' ,
