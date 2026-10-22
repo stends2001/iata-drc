@@ -83,8 +83,9 @@ if __name__ == '__main__':
     # iata - zone -out
     zone_out1= preprocess_single_iata_data(load_single_raw_iata(pm.data / 'raw' / 'iata' / 'zone_out_2025_1.csv'))
     zone_out2= preprocess_single_iata_data(load_single_raw_iata(pm.data / 'raw' / 'iata' / 'zone_out_2025_2.csv'))
-    zone_out3= preprocess_single_iata_data(load_single_raw_iata(pm.data / 'raw' / 'iata' / 'zone_out_2026.csv'))
-    zone_out  = pd.concat([zone_out1, zone_out2, zone_out3], axis =0)
+    zone_out3= preprocess_single_iata_data(load_single_raw_iata(pm.data / 'raw' / 'iata' / 'zone_out_2026_1.csv'))
+    zone_out4= preprocess_single_iata_data(load_single_raw_iata(pm.data / 'raw' / 'iata' / 'zone_out_2026_2.csv'))    
+    zone_out  = pd.concat([zone_out1, zone_out2, zone_out3, zone_out4], axis =0)
 
     save_df(zone_out,
              pm.data / 'processed' / 'mobility' / "iata_zone_out.csv"            
