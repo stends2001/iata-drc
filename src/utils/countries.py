@@ -64,7 +64,7 @@ countrycodes_dict = {
     'sudan'         : 'sdn',
     'tanzania'      : 'tza',
     'zambia'        : 'zmb',
-    'zimbabwe'      : 'zwe'
+    # 'zimbabwe'      : 'zwe'
 }
 
 capital_mappings = {
