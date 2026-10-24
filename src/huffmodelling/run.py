@@ -9,11 +9,27 @@ from .huff import get_huff
 from .propagate import propagate_split
 
 from .airport_closures import apply_airport_closures, airports_closed_since
+from .borders import BorderPolicy, get_border_huff
 from ..utils.constants import crs_metres
 
 from ..dataloading.shapedata import CountryShp
 
 from dataclasses import dataclass, field
+
+# Analysis unit per country (shape 'country' code -> 'admlvl' value). The DRC also has adm2 (territories),
+# so the unit level has to be chosen per country. Countries not listed fall back to DEFAULT_UNIT_LEVELS.
+UNIT_LEVELS = {
+    'cod': 'healthzone',     # DRC: health zones (cases are reported per health zone)
+    'uga': 'adm2',           # Uganda: districts (stored as adm2)
+}
+DEFAULT_UNIT_LEVELS = ('district', 'healthzone')
+
+
+def select_units(shapes):
+    """Rows of `shapes` that are analysis units, using the unit level of each country."""
+    level = shapes['country'].map(UNIT_LEVELS)
+    is_unit = (shapes['admlvl'] == level) | (level.isna() & shapes['admlvl'].isin(DEFAULT_UNIT_LEVELS))
+    return shapes[is_unit]
 
 @dataclass
 class HuffOutput:
@@ -43,6 +59,10 @@ class HuffOutput:
     closures_dict    : dict = field(default_factory=dict)
     huff_kwargs      : dict = field(default_factory=dict)
 
+    # added: border step
+    border_policy    : BorderPolicy | None = None
+    D_eff            : pd.DataFrame | dict | None = None   # border details (borders.get_border_huff info)
+
 
 def run_analysis(df_out : pd.DataFrame,
                  df_in : pd.DataFrame,
@@ -56,6 +76,7 @@ def run_analysis(df_out : pd.DataFrame,
                  index_months = None,
                  distance_mode : DistanceMode = 'euclidian-distance',
                  distance_matrix : pd.DataFrame | None = None,
+                 border_policy : BorderPolicy | None = None,
                  **huff_kwargs,
                  ) -> HuffOutput:
     """
@@ -67,6 +88,8 @@ def run_analysis(df_out : pd.DataFrame,
       friction_path   : friction GeoTIFF, needed for 'travel-time'
       distance_matrix : precomputed zone x airport matrix (skips get_distance_matrix; handy for
                         travel time, which takes a while to compute)
+      border_policy   : BorderPolicy (borders.py): cost of using an airport across a border, and
+                        border closures by month. None = no border effect (as before).
       **huff_kwargs   : passed to get_huff (ALPHA, BETA, D_MIN_KM, MAX_KM, D_HOME).
                         NB with travel time, D_MIN_KM and MAX_KM are in HOURS.
     """
@@ -97,8 +120,8 @@ def run_analysis(df_out : pd.DataFrame,
     airport_list = list(airports_shp['airport'].unique())
     countries_shp= pd.concat(countries_shp).to_crs(crs_metres)    
 
-    unit_shapes = (countries_shp[countries_shp['admlvl'].isin(['district','healthzone'])]
-                     .replace({"district" : 'unit', 'healthzone': 'unit'})
+    unit_shapes = (select_units(countries_shp)
+                     .replace({"district" : 'unit', 'healthzone': 'unit', 'adm2': 'unit'})
                      .rename(columns = {'name':'unit'})
                     )
 
@@ -114,7 +137,13 @@ def run_analysis(df_out : pd.DataFrame,
     else:
         D = distance_matrix.reindex(columns=airports_shp['airport'])
 
-    H = get_huff(D, S, mode, **huff_kwargs)
+    # border step: cross-border airports cost extra, closed borders cannot be crossed
+    if border_policy is None:
+        H, D_eff = get_huff(D, S, mode, **huff_kwargs), D
+    else:
+        huff_months = pd.DatetimeIndex(pd.to_datetime(list(months))).union(index_months)
+        H, D_eff = get_border_huff(D, S, mode, unit_shapes, airports_shp, border_policy,
+                                   huff_months, **huff_kwargs)
 
     I = get_catchment_incidence(H, population, monthly_cases, index_months)
 
@@ -140,4 +169,6 @@ def run_analysis(df_out : pd.DataFrame,
                 distance_mode    = 'precomputed' if distance_matrix is not None else distance_mode,
                 closures_dict    = dict(airports_closed_since) if closures else {},
                 huff_kwargs      = huff_kwargs,
+                border_policy    = border_policy,
+                D_eff            = D_eff,
                 )

@@ -11,6 +11,7 @@ def get_huff(
     D_MIN_KM    : float = 10,           # floor on distance (zones containing an airport would otherwise blow up)
     MAX_KM      : float = 400,          # airports further away are not an option
     D_HOME      : float | None  = None, # 'not flying' = as attractive as a median-size airport at this distance; None = classic Huff        
+    reach_matrix: pd.DataFrame | None = None,  # optional: distance used ONLY for the MAX_KM cut-off (default: distance_matrix)    
     ):
 
     """
@@ -36,7 +37,8 @@ def get_huff(
             S = S.reindex(D.columns).astype(float).fillna(0)                          # missing airport = not available  
 
             D_eff = D.clip(lower=D_MIN_KM)
-            upper = (D_eff ** -BETA).mul(S ** ALPHA, axis=1).where(D <= MAX_KM, 0) 
+            reach = D if reach_matrix is None else reach_matrix.reindex(index=D.index, columns=D.columns)
+            upper = (D_eff ** -BETA).mul(S ** ALPHA, axis=1).where((reach <= MAX_KM) & (D < float('inf')), 0)            
             U0    = 0.0 if D_HOME is None else (S[S > 0].median() ** ALPHA) * D_HOME ** -BETA
 
             huff = upper.div(upper.sum(axis=1) + U0, axis=0).fillna(0)  
